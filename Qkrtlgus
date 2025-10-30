@@ -1,0 +1,171 @@
+  h1 {
+    color: #1b5e20;
+  }
+  .quiz-box {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 30px;
+  }
+  .question {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+  .option {
+    display: block;
+    background: #c8e6c9;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    font-size: 1em;
+    transition: 0.2s;
+  }
+  .option:hover {
+    background: #a5d6a7;
+  }
+  .btn {
+    background: #388e3c;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 20px;
+  }
+  .btn:hover {
+    background: #2e7d32;
+  }
+  .result {
+    font-size: 1.4em;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+  <h1>🌿 생태환경 퀴즈</h1>
+  <div class="quiz-box">
+    <div id="quiz-container">
+      <div class="question" id="question"></div>
+      <div id="options"></div>
+      <button class="btn" id="next-btn">다음</button>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+<script>
+const quizData = [
+  {
+    question: "1. 온실 효과의 주요 원인이 되는 기체는?",
+    options: ["산소", "이산화탄소", "질소", "수소"],
+    answer: "이산화탄소"
+  },
+  {
+    question: "2. 생물 다양성을 지키기 위해 필요한 행동은?",
+    options: ["불법 포획", "쓰레기 투기", "서식지 보존", "벌목"],
+    answer: "서식지 보존"
+  },
+  {
+    question: "3. 기후 변화로 인한 가장 큰 문제는?",
+    options: ["기온 상승", "색 변화", "소음 증가", "인구 감소"],
+    answer: "기온 상승"
+  },
+  {
+    question: "4. 다음 중 재생 가능한 에너지원은?",
+    options: ["석유", "석탄", "태양광", "천연가스"],
+    answer: "태양광"
+  },
+  {
+    question: "5. 바다의 미세플라스틱 문제를 줄이는 방법은?",
+    options: ["플라스틱 사용 줄이기", "해양 투기", "낚시 증가", "쓰레기 소각"],
+    answer: "플라스틱 사용 줄이기"
+  },
+  {
+    question: "6. 생태계의 균형이 무너질 때 나타나는 현상은?",
+    options: ["멸종", "성장", "다양성 증가", "산소 증가"],
+    answer: "멸종"
+  },
+  {
+    question: "7. 도시의 열섬 현상을 줄이는 방법은?",
+    options: ["에어컨 사용 늘리기", "녹지 공간 확대", "도로 포장 늘리기", "차량 증가"],
+    answer: "녹지 공간 확대"
+  },
+  {
+    question: "8. 산성비의 주요 원인은?",
+    options: ["황산화물과 질소산화물", "산소와 수소", "오존", "이산화탄소"],
+    answer: "황산화물과 질소산화물"
+  },
+  {
+    question: "9. 플라스틱 대신 사용할 수 있는 친환경 소재는?",
+    options: ["대나무", "철", "유리", "콘크리트"],
+    answer: "대나무"
+  },
+  {
+    question: "10. ‘탄소중립’이 의미하는 것은?",
+    options: ["이산화탄소 배출을 0으로 만드는 것", "이산화탄소 배출과 흡수를 같게 하는 것", "석유 사용을 늘리는 것", "나무를 모두 베는 것"],
+    answer: "이산화탄소 배출과 흡수를 같게 하는 것"
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const nextBtn = document.getElementById("next-btn");
+const resultEl = document.getElementById("result");
+
+function loadQuestion() {
+  const currentQuiz = quizData[currentQuestion];
+  questionEl.textContent = currentQuiz.question;
+  optionsEl.innerHTML = "";
+
+  currentQuiz.options.forEach(opt => {
+    const button = document.createElement("button");
+    button.classList.add("option");
+    button.textContent = opt;
+    button.onclick = () => selectAnswer(opt);
+    optionsEl.appendChild(button);
+  });
+}
+
+function selectAnswer(selected) {
+  const correct = quizData[currentQuestion].answer;
+  const buttons = document.querySelectorAll(".option");
+
+  buttons.forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === correct) {
+      btn.style.background = "#81c784";
+    } else if (btn.textContent === selected && selected !== correct) {
+      btn.style.background = "#ef9a9a";
+    }
+  });
+
+  if (selected === correct) {
+    score++;
+  }
+}
+
+nextBtn.addEventListener("click", () => {
+  currentQuestion++;
+  if (currentQuestion < quizData.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+});
+
+function showResult() {
+  document.getElementById("quiz-container").style.display = "none";
+  resultEl.textContent = `당신의 점수는 ${score} / ${quizData.length} 점입니다! 🌎`;
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
